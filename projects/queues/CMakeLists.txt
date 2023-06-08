@@ -1,0 +1,6 @@
+SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Add all subdirectories found
+FOREACH(subdir ${SUBDIRS})
+    ADD_SUBDIRECTORY(${subdir})
+ENDFOREACH()
