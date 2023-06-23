@@ -1,5 +1,5 @@
-set(OUTPUT_NAME queuing_pointers)
-add_executable(${OUTPUT_NAME} queuing_pointers.cpp)
+set(OUTPUT_NAME queuing_pointers_string)
+add_executable(${OUTPUT_NAME} queuing_pointers_string.cpp)
 
 target_include_directories(${OUTPUT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/../.. # For FreeRTOSConfig.h

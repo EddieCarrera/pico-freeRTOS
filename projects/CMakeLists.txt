@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
+# Create custom macro
 # Iterate to dynamically add subdirectories
 # when new projects folders are made 
 macro(SUBDIRLIST result curdir)
