@@ -17,7 +17,7 @@ project(pico_examples C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
-# Must set board type, else "regualar" pico board is assumed
+# Must set board type, else "regular" pico board is assumed
 set(PICO_BOARD pico_w)
 
 if (PICO_SDK_VERSION_STRING VERSION_LESS "1.3.0")
@@ -39,5 +39,4 @@ add_compile_options(-Wall
 
 # Hardware-specific examples in subdirectories:
 add_subdirectory(pico_w_examples)
-add_subdirectory(projects)
-
+add_subdirectory("Mastering the FreeRTOS Kernel")

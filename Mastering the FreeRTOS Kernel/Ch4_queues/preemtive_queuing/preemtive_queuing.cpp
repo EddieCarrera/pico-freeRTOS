@@ -59,7 +59,7 @@ data_t dataToSend[2] =  { {100, sender1},
 QueueHandle_t queue;
 
 #define SEND_TASK_PRIORITY      2
-#define RECIEVE_TASK_PRIORITY   1   
+#define RECEIVE_TASK_PRIORITY   1   
 
 // Continuous task
 void transmitTask(void *parameter)
@@ -116,7 +116,7 @@ int main()
     xTaskCreate(transmitTask, "Transmit2", configMINIMAL_STACK_SIZE, 
                 &(dataToSend[1]), SEND_TASK_PRIORITY, NULL);    
     xTaskCreate(receiveTask, "ReceiveTask", configMINIMAL_STACK_SIZE, 
-                NULL, RECIEVE_TASK_PRIORITY, NULL);
+                NULL, RECEIVE_TASK_PRIORITY, NULL);
 
     vTaskStartScheduler();
 
