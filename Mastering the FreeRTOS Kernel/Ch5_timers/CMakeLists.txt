@@ -2,7 +2,7 @@ set(OUTPUT_NAME timers)
 add_executable(${OUTPUT_NAME} timers.cpp)
 
 target_include_directories(${OUTPUT_NAME} PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/../.. # For FreeRTOSConfig.h
+        ${CMAKE_CURRENT_LIST_DIR}/.. # For FreeRTOSConfig.h
         )
 
 target_link_libraries(${OUTPUT_NAME}
