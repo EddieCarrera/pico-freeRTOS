@@ -1,5 +1,5 @@
-set(OUTPUT_NAME timer_callbacks)
-set(SOURCES timer_callbacks.cpp)
+set(OUTPUT_NAME interrupts)
+set(SOURCES interrupts.cpp)
 
 foreach(OUTPUT SOURCE IN ZIP_LISTS OUTPUT_NAME SOURCES)
     add_executable(${OUTPUT} ${SOURCE})

@@ -20,6 +20,17 @@
  * 3) Unlike other software timer API functions, vTimerSetTimerID() and 
  * pvTimerGetTimerID() access the software timer directly—they do not send 
  * a command to the timer command queue.
+ * 
+ * 4) If xTimerChangePeriod() is used to change the period of a timer that 
+ * is already running, then the timer will use the new period value to 
+ * recalculate its expiry time. The recalculated expiry time is relative to 
+ * when xTimerChangePeriod() was called, not relative to when the timer was 
+ * originally started. 
+ * 
+ * 5) If xTimerChangePeriod() is used to change the period of a timer that 
+ * is in the Dormant state (a timer that is not running), then the timer 
+ * will calculate an expiry time, and transition to the Running state 
+ * (the timer will start running).
 *****************************************************************************/
 
 #define main_ONESHOT_TIMER_PERIOD   pdMS_TO_TICKS(3333)
