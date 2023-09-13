@@ -1,5 +1,5 @@
-set(OUTPUT_NAME interrupts)
-set(SOURCES interrupts.cpp)
+set(OUTPUT_NAME gpioInterrupt_semaphore)
+set(SOURCES gpioInterrupt_semaphore.cpp)
 
 foreach(OUTPUT SOURCE IN ZIP_LISTS OUTPUT_NAME SOURCES)
     add_executable(${OUTPUT} ${SOURCE})
