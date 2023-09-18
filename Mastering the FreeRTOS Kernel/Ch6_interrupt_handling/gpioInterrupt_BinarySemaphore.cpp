@@ -41,6 +41,14 @@
  * the currently executing task (the task that was interrupted), then, internally, 
  * xSemaphoreGiveFromISR() will set *pxHigherPriorityTaskWoken to pdTRUE.
  * 
+ * 4) The drawback of binary semaphores is that events can be lost if multiple
+ * interrupts are received before the callback task finishes processing. 
+ * If a second interrupt occurs while the task is still processing the first event. 
+ * The ISR ‘gives’ the semaphore again, effectively latching the event so the event 
+ * is not lost. A third interrupt can occur while the task is still processing the 
+ * first event. The ISR cannot give the semaphore again, because the semaphore is 
+ * already available, and the event is lost. Once the task finishes, it will take
+ * the semaphore and process again, but the context of 3 interrupts occurring is lost.
 *****************************************************************************/
 
 #define GPIO_PIN 9

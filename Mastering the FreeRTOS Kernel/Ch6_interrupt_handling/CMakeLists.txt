@@ -1,5 +1,5 @@
-set(OUTPUT_NAME gpioInterrupt_semaphore)
-set(SOURCES gpioInterrupt_semaphore.cpp)
+set(OUTPUT_NAME gpioInterrupt_binarySemaphore gpioInterrupt_countingSemaphore)
+set(SOURCES gpioInterrupt_binarySemaphore.cpp gpioInterrupt_countingSemaphore.cpp)
 
 foreach(OUTPUT SOURCE IN ZIP_LISTS OUTPUT_NAME SOURCES)
     add_executable(${OUTPUT} ${SOURCE})
