@@ -6,7 +6,7 @@
 #include "hardware/gpio.h"
 #include "pico/cyw43_arch.h"
 
-/***************************** Important Notes *****************************
+/***************************** Important Notes *********************************
  * 1) FreeRTOS API functions perform actions that are not valid inside an 
  * ISR—the most notable of which is placing the task that called the API 
  * function into the Blocked state. Never call a FreeRTOS API function that 
@@ -31,8 +31,7 @@
  * Note: Deferred Interrupt Processing - when processing is deferred to a task
  * instead of running in an ISR. 
  * 
- * 3) The purpose of pxHigherPriorityTaskWoken and xSemaphoreGiveFromISR()
- * 
+ * 3) Purpose of pxHigherPriorityTaskWoken/xSemaphoreGiveFromISR()
  * It is possible that a single semaphore will have one or more tasks blocked 
  * on it waiting for the semaphore to become available. Calling xSemaphoreGiveFromISR() 
  * can make the semaphore available, and so cause a task that was waiting for the 
@@ -49,7 +48,7 @@
  * first event. The ISR cannot give the semaphore again, because the semaphore is 
  * already available, and the event is lost. Once the task finishes, it will take
  * the semaphore and process again, but the context of 3 interrupts occurring is lost.
-*****************************************************************************/
+ *******************************************************************************/
 
 #define GPIO_PIN 9
 

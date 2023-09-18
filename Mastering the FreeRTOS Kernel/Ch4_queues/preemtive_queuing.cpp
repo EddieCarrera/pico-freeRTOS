@@ -4,40 +4,39 @@
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 
-/***************************** Important Notes *****************************
-    1) Blocking on Queue Reads
-    When a task attempts to read from a queue, it can optionally specify 
-    a ‘block’ time. This is the time the task will be kept in the Blocked 
-    state to wait for data to be available from the queue, should the queue 
-    already be empty. A task that is in the Blocked state, waiting for data 
-    to become available from a queue, is automatically moved to the Ready 
-    state when another task or interrupt places data into the queue. The 
-    task will also be moved automatically from the Blocked state to the 
-    Ready state if the specified block time expires before data becomes 
-    available.
-
-    Queues can have multiple readers, so it is possible for a single queue to 
-    have more than one task blocked on it waiting for data. When this is the 
-    case, only one task will be unblocked when data becomes available. The 
-    task that is unblocked will always be the highest priority task that is 
-    waiting for data. If the blocked tasks have equal priority, then the task 
-    that has been waiting for data the longest will be unblocked.
-
-    2) Blocking on Queue Writes
-    Just as when reading from a queue, a task can optionally specify a block 
-    time when writing to a queue. In this case, the block time is the maximum 
-    time the task should be held in the Blocked state to wait for space to become 
-    available on the queue, should the queue already be full.
-
-    Queues can have multiple writers, so it is possible for a full queue to have 
-    more than one task blocked on it waiting to complete a send operation. When 
-    this is the case, only one task will be unblocked when space on the queue 
-    becomes available. The task that is unblocked will always be the highest 
-    priority task that is waiting for space. If the blocked tasks have equal 
-    priority, then the task that has been waiting for space the longest will be 
-    unblocked.
-
-*****************************************************************************/
+/***************************** Important Notes *********************************
+ * 1) Blocking on Queue Reads
+ * When a task attempts to read from a queue, it can optionally specify 
+ * a ‘block’ time. This is the time the task will be kept in the Blocked 
+ * state to wait for data to be available from the queue, should the queue 
+ * already be empty. A task that is in the Blocked state, waiting for data 
+ * to become available from a queue, is automatically moved to the Ready 
+ * state when another task or interrupt places data into the queue. The 
+ * task will also be moved automatically from the Blocked state to the 
+ * Ready state if the specified block time expires before data becomes 
+ * available.
+ * 
+ * Queues can have multiple readers, so it is possible for a single queue to 
+ * have more than one task blocked on it waiting for data. When this is the 
+ * case, only one task will be unblocked when data becomes available. The 
+ * task that is unblocked will always be the highest priority task that is 
+ * waiting for data. If the blocked tasks have equal priority, then the task 
+ * that has been waiting for data the longest will be unblocked.
+ * 
+ * 2) Blocking on Queue Writes
+ * Just as when reading from a queue, a task can optionally specify a block 
+ * time when writing to a queue. In this case, the block time is the maximum 
+ * time the task should be held in the Blocked state to wait for space to become 
+ * available on the queue, should the queue already be full.
+ * 
+ * Queues can have multiple writers, so it is possible for a full queue to have 
+ * more than one task blocked on it waiting to complete a send operation. When 
+ * this is the case, only one task will be unblocked when space on the queue 
+ * becomes available. The task that is unblocked will always be the highest 
+ * priority task that is waiting for space. If the blocked tasks have equal 
+ * priority, then the task that has been waiting for space the longest will be 
+ * unblocked.
+ *******************************************************************************/
 
 
 /* Enums */

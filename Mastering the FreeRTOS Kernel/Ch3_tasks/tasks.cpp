@@ -4,22 +4,19 @@
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 
-/*********************** Important Notes ************************* 
-    1) When a task goes into the block state, the scheduler
-       will select the next highest priority task to run even
-       BEFORE the next tick.
-       
-    2) vTaskDelayUntil() is used by periodic tasks to ensure a 
-       constant execution frequency. vTaskDelay() will cause a 
-       task to block for the specified number of ticks from the 
-       time vTaskDelay() is called. It is therefore difficult to 
-       use vTaskDelay() by itself to generate a fixed execution 
-       frequency as the time between a task unblocking following 
-       a call to vTaskDelay() and that task next calling vTaskDelay() 
-       may not be fixed [the task may take a different path 
-       through the code between calls, or may get interrupted or 
-       preempted a different number of times each time it executes]. 
-*****************************************************************/
+/***************************** Important Notes *********************************
+ * 1) When a task goes into the block state, the scheduler will select the next 
+ * highest priority task to run even BEFORE the next tick.
+ *   
+ * 2) vTaskDelayUntil() is used by periodic tasks to ensure a constant execution 
+ * frequency. vTaskDelay() will cause a task to block for the specified number of 
+ * ticks from the time vTaskDelay() is called. It is therefore difficult to use 
+ * vTaskDelay() by itself to generate a fixed execution frequency as the time between 
+ * a task unblocking following a call to vTaskDelay() and that task next calling 
+ * vTaskDelay() may not be fixed [the task may take a different path through the 
+ * code between calls, or may get interrupted or preempted a different number of 
+ * times each time it executes]. 
+ *******************************************************************************/
 
 #define TASK1_PRIORITY          1
 #define TASK2_PRIORITY          1

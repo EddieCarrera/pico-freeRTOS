@@ -4,15 +4,14 @@
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 
-/***************************** Important Notes *****************************
- * 1) Notice how queue functions will always work with the address of the
- *    data being worked with. This is a gotcha, as not referencing '&'
- *    correctly will cause the code to not work. 
+/***************************** Important Notes *********************************
+ * 1) Notice how queue functions will always work with the address of the data 
+ * being worked with. This is a gotcha, as not referencing '&'correctly will cause 
+ * the code to not work. 
  * 
- *    In this case, notice how strings to queues are sent by sending
- *    the address of the pointer that points to the buffer
- *    a.k.a a pointer to a pointer
-*****************************************************************************/
+ * In this case, notice how strings to queues are sent by sending the address of 
+ * the pointer that points to the buffer a.k.a a pointer to a pointer
+ *******************************************************************************/
 
 QueueHandle_t xPointerQueue;
 

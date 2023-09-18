@@ -7,7 +7,7 @@
 // #define UNIQUE_CALLBACK_EXAMPLE
 #define SINGLE_CALLBACK_TIMERID_EXAMPLE
 
-/***************************** Important Notes *****************************
+/***************************** Important Notes *********************************
  * 1) By default, the max timers available in the deamon queue is set by 
  * configTIMER_QUEUE_LENGTH. The default priority is configMAX_PRIORITIES-1. 
  * 
@@ -31,7 +31,7 @@
  * is in the Dormant state (a timer that is not running), then the timer 
  * will calculate an expiry time, and transition to the Running state 
  * (the timer will start running).
-*****************************************************************************/
+ *******************************************************************************/
 
 #define main_ONESHOT_TIMER_PERIOD   pdMS_TO_TICKS(3333)
 #define main_RELOAD_TIMER_PERIOD    pdMS_TO_TICKS(500)
