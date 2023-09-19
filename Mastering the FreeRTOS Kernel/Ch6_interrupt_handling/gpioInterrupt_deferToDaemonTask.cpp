@@ -41,6 +41,13 @@
 
 #define GPIO_PIN 9
 
+void vDeferredHandlingFunction( void *pvParameter1, uint32_t ulParameter2 )
+{
+    /* Process the event - in this case just print out a message and the value of
+    ulParameter2. pvParameter1 is not used in this example. */
+    printf("Handler task - Processing event %d\r\n", ulParameter2);
+}
+
 void gpio_callback(uint gpio, uint32_t events)
 {
     static uint32_t ulParameterValue = 0;
@@ -75,13 +82,6 @@ void gpio_callback(uint gpio, uint32_t events)
         portYIELD_FROM_ISR() will have no effect. */
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
-}
-
-void vDeferredHandlingFunction( void *pvParameter1, uint32_t ulParameter2 )
-{
-    /* Process the event - in this case just print out a message and the value of
-    ulParameter2. pvParameter1 is not used in this example. */
-    printf("Handler task - Processing event %d\r\n", ulParameter2);
 }
 
 int main()
