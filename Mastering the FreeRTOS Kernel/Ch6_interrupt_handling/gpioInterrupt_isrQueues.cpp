@@ -39,27 +39,29 @@
  * 
  * 2) With regards to portYIELD_FROM_ISR()
  * The interrupt will always return to the task in the Running state, even if the 
- * task in the Running state changed while the interrupt was executing. 
+ * task in the Running state changed while the interrupt was executing.
+ * 
+ *  
  *******************************************************************************/
 
 #define GPIO_PIN        9
-#define TX_PERIOD_MS    5000
+#define TX_PERIOD_MS    2500
 
 QueueHandle_t intQueue;
 QueueHandle_t stringQueue;
 BaseType_t full = false;
+uint32_t ctr = 0;
 
 void periodic_NumToISR_task(void *pvParameter)
 {
-    static uint32_t ctr = 0;
     TickType_t prevTime = xTaskGetTickCount();
-
     while(1)
     {
         vTaskDelayUntil( &prevTime, pdMS_TO_TICKS(TX_PERIOD_MS) );
         if (xQueueSendToBack( intQueue, &ctr, 0 ) != errQUEUE_FULL)
         {
-            ctr = ctr > 5 ? ctr = 0 : ctr++;
+            printf("%d added to numQueue\r\n", ctr);
+            if (++ctr >= 5){ctr = 0;}
         }
     }
 }
@@ -84,11 +86,11 @@ void gpio_callback(uint gpio, uint32_t events)
     // Defines an array of pointers to strings
     static const char *strings[] =
     {
+        "String0\r\n",
         "String1\r\n",
         "String2\r\n",
         "String3\r\n",
         "String4\r\n"
-        "String5\r\n"
     };
     
     /* As always, xHigherPriorityTaskWoken is initialized to pdFALSE to be able to
@@ -104,14 +106,16 @@ void gpio_callback(uint gpio, uint32_t events)
     if (gpio == GPIO_PIN)
     {
         /* Read from the queue until the queue is empty. */
-        while (xQueueReceiveFromISR(xIntegerQueue, 
+        while (xQueueReceiveFromISR(intQueue, 
                                     &uReceivedNumber,
                                     &xHigherPriorityTaskWoken) != errQUEUE_EMPTY)
         {
-            xQueueSendToBackFromISR(xStringQueue,
+            printf("%d removed to numQueue\r\n", uReceivedNumber);
+            xQueueSendToBackFromISR(stringQueue,
                                     &strings[uReceivedNumber],
                                     &xHigherPriorityTaskWoken );
         }
+        ctr = 0;
     } // if (gpio == GPIO_PIN)
 
     portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
@@ -126,6 +130,22 @@ int main()
     printf("ISR Queues Example\r\n");
     gpio_pull_up(GPIO_PIN);
     gpio_set_irq_enabled_with_callback(GPIO_PIN, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
+
+    /* Before a queue can be used it must first be created.  Create both queues used
+    by this example.  One queue can hold variables of type uint32_t, the other queue
+    can hold variables of type char*.  Both queues can hold a maximum of 10 items.  A
+    real application should check the return values to ensure the queues have been
+    successfully created. */
+    intQueue = xQueueCreate( 5, sizeof( uint32_t ) );
+    stringQueue = xQueueCreate( 5, sizeof( char * ) );
+
+    /* Create the task that uses a queue to pass integers to the interrupt service
+    routine.  The task is created at priority 1. */
+    xTaskCreate( periodic_NumToISR_task, "IntGen", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
+    
+    /* Create the task that prints out the strings sent to it from the interrupt
+    service routine.  This task is created at the higher priority of 2. */
+    xTaskCreate( stringFromISR_task, "String", configMINIMAL_STACK_SIZE, NULL, 2, NULL );
 
     /* Start the scheduler so the created tasks start executing. */
     vTaskStartScheduler();
