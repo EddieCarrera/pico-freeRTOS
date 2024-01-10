@@ -58,7 +58,7 @@
  * 
  * Deadlock occurs when two tasks cannot proceed because they are both waiting for a 
  * resource that is held by the other. Consider the following scenario: (1) Task A 
- * executes and successfully takes mutex X. (2) Task A is pre-empted by Task B. 
+ * executes and successfully takes mutex X. (2) Task A is preempted by Task B. 
  * (3) Task B successfully takes mutex Y before attempting to also take mutex X, 
  * but mutex X is held by Task A so is not available to Task B. Task B opts to enter 
  * the Blocked state to wait for mutex X to be released. (4) Task A continues 
@@ -197,7 +197,7 @@ static void prvStdioGatekeeperTask( void *pvParameters )
 static void prvPrintTask( void *pvParameters )
 {
     int iIndexToString;
-    const TickType_t xMaxBlockTimeTicks = 0x10;
+    const TickType_t xMaxBlockTimeTicks = 0x20;
     /* Two instances of this task are created. The task parameter is used to pass
     an index into an array of strings into the task. Cast this to the required type. */
     iIndexToString = ( int ) pvParameters;
@@ -214,7 +214,7 @@ static void prvPrintTask( void *pvParameters )
         value is returned. In a more secure application a version of rand() that is
         known to be reentrant should be used - or calls to rand() should be protected
         using a critical section. */
-        vTaskDelay( ( rand() % xMaxBlockTimeTicks ) );
+        vTaskDelay( ( get_rand_32() % xMaxBlockTimeTicks ) );
     }
 }
 
