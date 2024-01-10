@@ -1,6 +1,8 @@
-set(OUTPUT_NAME mutex_printString)
+set(OUTPUT_NAME mutex_printString
+                gatekeeperTask_printString)
 
-set(SOURCES mutex_printString.cpp)
+set(SOURCES mutex_printString.cpp
+            gatekeeperTask_printString.cpp)
 
 foreach(OUTPUT SOURCE IN ZIP_LISTS OUTPUT_NAME SOURCES)
     add_executable(${OUTPUT} ${SOURCE})

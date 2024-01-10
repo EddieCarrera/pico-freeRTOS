@@ -45,7 +45,7 @@ static void prvNewPrintString( const char *pcString )
     check that xSemaphoreTake() returns pdTRUE before accessing the shared resource
     (which in this case is standard out). As noted earlier in this book, indefinite
     time outs are not recommended for production code. */
-    xSemaphoreTake(xMutex, portMAX_DELAY);
+    xSemaphoreTake(xMutex, portMAX_DELAY); // Can be commented out to demo corruption
     {
         /* The following line will only execute once the mutex has been successfully
         obtained. Standard out can be accessed freely now as only one task can have
@@ -64,7 +64,7 @@ static void prvNewPrintString( const char *pcString )
         }
         /* The mutex MUST be given back! */
     }
-    xSemaphoreGive( xMutex );
+    xSemaphoreGive( xMutex ); // Can be commented out to demo corruption
 }
 
 static void prvPrintTask( void *pvParameters )
