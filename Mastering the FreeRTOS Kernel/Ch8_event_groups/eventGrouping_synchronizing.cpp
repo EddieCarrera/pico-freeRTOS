@@ -37,7 +37,7 @@
  * problem, consider a scenario where Task A, Task B and Task C attempt to synchronize 
  * using an event group:
  * 
- * (1)Task A and Task B have already reached the synchronization point, so their 
+ * (1) Task A and Task B have already reached the synchronization point, so their 
  * event bits are set in the event group, and they are in the Blocked state to 
  * wait for task C’s event bit to also become set. (2) Task C reaches the synchronization 
  * point, and uses xEventGroupSetBits() to set its bit in the event group. As 
@@ -67,9 +67,8 @@ static void vSyncingTask( void *pvParameters )
     const TickType_t xMinDelay = pdMS_TO_TICKS( 200UL );
     TickType_t xDelayTime;
     EventBits_t uxThisTasksSyncBit;
-    const EventBits_t uxAllSyncBits = ( mainFIRST_TASK_BIT |
-    mainSECOND_TASK_BIT |
-    mainTHIRD_TASK_BIT );
+    const EventBits_t uxAllSyncBits = (mainFIRST_TASK_BIT|mainSECOND_TASK_BIT|mainTHIRD_TASK_BIT);
+
     /* Three instances of this task are created - each task uses a different event
     bit in the synchronization. The event bit to use is passed into each task
     instance using the task parameter. Store it in the uxThisTasksSyncBit
@@ -81,12 +80,14 @@ static void vSyncingTask( void *pvParameters )
         pseudo random time. This prevents all three instances of this task reaching
         the synchronization point at the same time, and so allows the example’s
         behavior to be observed more easily. */
-        xDelayTime = ( rand() % xMaxDelay ) + xMinDelay;
+        xDelayTime = ( get_rand_32() % xMaxDelay ) + xMinDelay;
         vTaskDelay( xDelayTime );
+
         /* Print out a message to show this task has reached its synchronization
         point. pcTaskGetTaskName() is an API function that returns the name assigned
         to the task when the task was created. */
-        vPrintTwoStrings( pcTaskGetTaskName( NULL ), "reached sync point" );
+        printf("%s%s", pcTaskGetTaskName( NULL ), " reached sync point\r\n" );
+
         /* Wait for all the tasks to have reached their respective synchronization
         points. */
         xEventGroupSync( /* The event group used to synchronize. */
@@ -104,7 +105,8 @@ static void vSyncingTask( void *pvParameters )
         point. As an indefinite delay was used the following line will only be
         executed after all the tasks reached their respective synchronization
         points. */
-        vPrintTwoStrings( pcTaskGetTaskName( NULL ), "exited sync point" );
+
+        printf( pcTaskGetTaskName( NULL ), " exited sync point\r\n" );
     }
 }
 
@@ -120,16 +122,18 @@ int main()
 
     /* Before an event group can be used it must first be created. */
     xEventGroup = xEventGroupCreate();
+
     /* Create three instances of the task. Each task is given a different name,
     which is later printed out to give a visual indication of which task is
     executing. The event bit to use when the task reaches its synchronization point
     is passed into the task using the task parameter. */
-    xTaskCreate( vSyncingTask, "Task 1", 1000, mainFIRST_TASK_BIT, 1, NULL );
-    xTaskCreate( vSyncingTask, "Task 2", 1000, mainSECOND_TASK_BIT, 1, NULL );
-    xTaskCreate( vSyncingTask, "Task 3", 1000, mainTHIRD_TASK_BIT, 1, NULL );
+    xTaskCreate( vSyncingTask, "Task 1", configMINIMAL_STACK_SIZE, mainFIRST_TASK_BIT, 1, NULL );
+    xTaskCreate( vSyncingTask, "Task 2", configMINIMAL_STACK_SIZE, mainSECOND_TASK_BIT, 1, NULL );
+    xTaskCreate( vSyncingTask, "Task 3", configMINIMAL_STACK_SIZE, mainTHIRD_TASK_BIT, 1, NULL );
+
     /* Start the scheduler so the created tasks start executing. */
     vTaskStartScheduler();
+
     /* As always, the following line should never be reached. */
     for( ;; );
-    
 }
