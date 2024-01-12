@@ -103,16 +103,51 @@
  * less flexible alternative to xTaskNotify(), and the ulTaskNotifyTake() API function 
  * is provided as a simpler but less flexible alternative to xTaskNotifyWait().
  * 
- * 5) The best uses of xTaskNotify() can be found on page 308. It contains a 
- *  eNotifyAction parameter that allows for the following actions:
+ * 5) The best uses of xTaskNotify() can be found on page 308. 
+ * 
+ * BaseType_t xTaskNotify( TaskHandle_t xTaskToNotify, uint32_t ulValue, 
+ *                         eNotifyAction eAction );
+ * 
+ * It contains a eNotifyAction parameter that allows for the following actions:
  * 
  * A. eNoAction
+ * ***************
+ * The receiving task’s notification state is set to pending without it’s notification 
+ * value being updated. The xTaskNotify() ulValue parameter is not used. The eNoAction 
+ * action allows a task notification to be used as a faster and lighter weight alternative 
+ * to a binary semaphore
  * 
  * B. eSetBits
+ * ***************
+ * The receiving task’s notification value is bitwise OR’ed with the value passed 
+ * in the xTaskNotify() ulValue parameter. For example, if ulValue is set to 0x01, 
+ * then bit 0 will be set in the receiving task's notification value. As another 
+ * example, if ulValue is 0x06 (binary 0110) then bit 1 and bit 2 will be set in the 
+ * receiving task's notification value. The eSetBits action allows a task notification 
+ * to be used as a faster and lighter weight alternative to an event group.
  * 
- * C.
+ * C. eIncrement
+ * ***************
+ * The receiving task’s notification value is incremented. The xTaskNotify() ulValue 
+ * parameter is not used. The eIncrement action allows a task notification to be used
+ * as a faster and lighter weight alternative to a binary or counting semaphore, and 
+ * is equivalent to the simpler xTaskNotifyGive() API function.
+ * 
+ * D. eSetValueWithoutOverwrite
+ * ******************************
+ * If the receiving task had a notification pending before xTaskNotify() was called, 
+ * then no action is taken and xTaskNotify() will return pdFAIL. If the receiving 
+ * task did not have a notification pending before xTaskNotify() was called, then 
+ * the receiving task’s notification value is set to the value passed in the xTaskNotify() 
+ * ulValueparameter.
+ * 
+ * E. eSetValueWithOverwrite
+ * ****************************
+ * The receiving task’s notification value is set to the value passed in the 
+ * xTaskNotify() ulValue parameter, regardless of whether the receiving task had a 
+ * notification pending before xTaskNotify() was called or not.
+ * 
  *******************************************************************************/
-
 #define GPIO_PIN 9
 
 void gpio_callback(uint gpio, uint32_t events)
