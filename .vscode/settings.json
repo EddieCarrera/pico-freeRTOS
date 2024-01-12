@@ -2,5 +2,8 @@
     "files.associations": {
         "lwipopts_examples_common.h": "c",
         "stdio_usb.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "gpio"
+    ]
 }

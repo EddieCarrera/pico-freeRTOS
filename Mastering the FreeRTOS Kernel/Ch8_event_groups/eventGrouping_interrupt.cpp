@@ -25,13 +25,17 @@
 #define mainFIRST_TASK_BIT ( 1UL << 0UL ) /* Event bit 0, which is set by a task. */
 #define mainSECOND_TASK_BIT ( 1UL << 1UL ) /* Event bit 1, which is set by a task. */
 #define mainISR_BIT ( 1UL << 2UL ) /* Event bit 2, which is set by an ISR. */
+#define GPIO_PIN 9
 
-void vDeferredHandlingFunction( void *pvParameter )
+/* Declare the event group used to synchronize the three tasks. */
+EventGroupHandle_t xEventGroup;
+
+void vDeferredHandlingFunction( void *pvParameter, uint32_t ulParameter2 )
 {
     printf("%s", pvParameter);
 }
 
-static uint32_t ulEventBitSettingISR( void )
+static void gpio_callback(uint gpio, uint32_t events)
 {
     /* The string is not printed within the interrupt service routine, but is instead
     sent to the RTOS daemon task for printing. It is therefore declared static to ensure
@@ -134,7 +138,7 @@ int main()
     sleep_ms(1000);
     printf("Event grouping example\r\n");
     gpio_pull_up(GPIO_PIN);
-    gpio_set_irq_enabled_with_callback(GPIO_PIN, GPIO_IRQ_EDGE_FALL, true, &ulEventBitSettingISR);
+    gpio_set_irq_enabled_with_callback(GPIO_PIN, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
 
     /* Before an event group can be used it must first be created. */
     xEventGroup = xEventGroupCreate();

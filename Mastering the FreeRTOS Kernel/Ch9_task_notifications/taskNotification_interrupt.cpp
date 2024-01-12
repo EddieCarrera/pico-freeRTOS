@@ -103,7 +103,14 @@
  * less flexible alternative to xTaskNotify(), and the ulTaskNotifyTake() API function 
  * is provided as a simpler but less flexible alternative to xTaskNotifyWait().
  * 
- * The best uses of xTaskNotify() can be found on page 308.
+ * 5) The best uses of xTaskNotify() can be found on page 308. It contains a 
+ *  eNotifyAction parameter that allows for the following actions:
+ * 
+ * A. eNoAction
+ * 
+ * B. eSetBits
+ * 
+ * C.
  *******************************************************************************/
 
 #define GPIO_PIN 9
