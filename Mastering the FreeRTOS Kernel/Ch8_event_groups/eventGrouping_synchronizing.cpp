@@ -54,9 +54,9 @@
  * 
  *******************************************************************************/
 /* Definitions for the event bits in the event group. */
-#define mainFIRST_TASK_BIT ( 1UL << 0UL ) /* Event bit 0, set by the first task. */
-#define mainSECOND_TASK_BIT( 1UL << 1UL ) /* Event bit 1, set by the second task. */
-#define mainTHIRD_TASK_BIT ( 1UL << 2UL ) /* Event bit 2, set by the third task. */
+#define mainFIRST_TASK_BIT  ( 1UL << 0UL ) /* Event bit 0, set by the first task. */
+#define mainSECOND_TASK_BIT ( 1UL << 1UL ) /* Event bit 1, set by the second task. */
+#define mainTHIRD_TASK_BIT  ( 1UL << 2UL ) /* Event bit 2, set by the third task. */
 
 /* Declare the event group used to synchronize the three tasks. */
 EventGroupHandle_t xEventGroup;
@@ -106,7 +106,7 @@ static void vSyncingTask( void *pvParameters )
         executed after all the tasks reached their respective synchronization
         points. */
 
-        printf( pcTaskGetTaskName( NULL ), " exited sync point\r\n" );
+        printf( "%s%s", pcTaskGetTaskName( NULL ), " exited sync point\r\n" );
     }
 }
 
@@ -117,8 +117,8 @@ int main()
 
     sleep_ms(1000);
     printf("Event grouping synchronizing example\r\n");
-    gpio_pull_up(GPIO_PIN);
-    gpio_set_irq_enabled_with_callback(GPIO_PIN, GPIO_IRQ_EDGE_FALL, true, &ulEventBitSettingISR);
+    // gpio_pull_up(GPIO_PIN);
+    // gpio_set_irq_enabled_with_callback(GPIO_PIN, GPIO_IRQ_EDGE_FALL, true, &ulEventBitSettingISR);
 
     /* Before an event group can be used it must first be created. */
     xEventGroup = xEventGroupCreate();
@@ -127,9 +127,9 @@ int main()
     which is later printed out to give a visual indication of which task is
     executing. The event bit to use when the task reaches its synchronization point
     is passed into the task using the task parameter. */
-    xTaskCreate( vSyncingTask, "Task 1", configMINIMAL_STACK_SIZE, mainFIRST_TASK_BIT, 1, NULL );
-    xTaskCreate( vSyncingTask, "Task 2", configMINIMAL_STACK_SIZE, mainSECOND_TASK_BIT, 1, NULL );
-    xTaskCreate( vSyncingTask, "Task 3", configMINIMAL_STACK_SIZE, mainTHIRD_TASK_BIT, 1, NULL );
+    xTaskCreate( vSyncingTask, "Task 1", configMINIMAL_STACK_SIZE, (void*)mainFIRST_TASK_BIT, 1, NULL );
+    xTaskCreate( vSyncingTask, "Task 2", configMINIMAL_STACK_SIZE, (void*)mainSECOND_TASK_BIT, 1, NULL );
+    xTaskCreate( vSyncingTask, "Task 3", configMINIMAL_STACK_SIZE, (void*)mainTHIRD_TASK_BIT, 1, NULL );
 
     /* Start the scheduler so the created tasks start executing. */
     vTaskStartScheduler();

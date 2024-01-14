@@ -71,7 +71,7 @@ static void gpio_callback(uint gpio, uint32_t events)
 
 static void vEventBitSettingTask( void *pvParameters )
 {
-    const TickType_t xDelay200ms = pdMS_TO_TICKS( 200UL ), xDontBlock = 0;
+    const TickType_t xDelay200ms = pdMS_TO_TICKS( 200UL );
     for( ;; )
     {
         /* Delay for a short while before starting the next loop. */
@@ -115,15 +115,15 @@ static void vEventBitReadingTask( void *pvParameters )
         portMAX_DELAY );
 
         /* Print a message for each bit that was set. */
-        if (xEventGroupValue & mainFIRST_TASK_BIT != 0)
+        if ((xEventGroupValue & mainFIRST_TASK_BIT) != 0)
         {
             printf( "Bit reading task -\t Event bit 0 was set\r\n");
         }
-        if (xEventGroupValue & mainSECOND_TASK_BIT != 0)
+        if ((xEventGroupValue & mainSECOND_TASK_BIT) != 0)
         {
             printf( "Bit reading task -\t Event bit 1 was set\r\n");
         }
-        if (xEventGroupValue & mainISR_BIT != 0)
+        if ((xEventGroupValue & mainISR_BIT) != 0)
         {
             printf( "Bit reading task -\t Event bit 2 was set\r\n");
         }

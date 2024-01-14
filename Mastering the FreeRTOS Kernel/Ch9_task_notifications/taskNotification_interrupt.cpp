@@ -150,6 +150,20 @@
  *******************************************************************************/
 #define GPIO_PIN 9
 
+void gpio_triggered_task(void *TaskParam)
+{
+    while(1)
+    {
+        /* Wait to receive a notification sent directly to this task from the
+        interrupt service routine. */
+
+        /* xClearCountOnExit parameter can be changed to pdFALSE so that 
+        ulTaskNotifyTake behaves more like a counting semaphore */
+        ulTaskNotifyTake( pdTRUE, portMAX_DELAY );
+        printf( "Handler task - Processing event.\r\n");
+    }
+}
+
 void gpio_callback(uint gpio, uint32_t events)
 {
     /* The xHigherPriorityTaskWoken parameter must be initialized to pdFALSE as
@@ -167,7 +181,7 @@ void gpio_callback(uint gpio, uint32_t events)
         vTaskNotifyGiveFromISR( /* The handle of the task to which the notification
                                    is being sent. The handle was saved when the task
                                    was created. */
-                                gpio_triggered_task,
+                                (TaskHandle_t)gpio_triggered_task,
                                 /* xHigherPriorityTaskWoken is used in the usual way. */
                                 &xHigherPriorityTaskWoken );
 
@@ -177,20 +191,6 @@ void gpio_callback(uint gpio, uint32_t events)
         xHigherPriorityTaskWoken is still pdFALSE then calling
         portYIELD_FROM_ISR() will have no effect. */
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-    }
-}
-
-void gpio_triggered_task(void *TaskParam)
-{
-    while(1)
-    {
-        /* Wait to receive a notification sent directly to this task from the
-        interrupt service routine. */
-
-        /* xClearCountOnExit parameter can be changed to pdFALSE so that 
-        ulTaskNotifyTake behaves more like a counting semaphore */
-        ulTaskNotifyTake( pdTRUE, portMAX_DELAY );
-        printf( "Handler task - Processing event.\r\n");
     }
 }
 
